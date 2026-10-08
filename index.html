@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Галерея изображений</title>
+    <script src="gallery.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 24px 16px;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            color: #1f2937;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+        }
+        .card {
+            width: 100%;
+            max-width: 980px;
+            padding: 32px 24px 24px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(31, 41, 55, 0.3);
+        }
+        h1 {
+            margin: 0 0 6px;
+            font-size: 26px;
+            text-align: center;
+        }
+        .subtitle {
+            margin: 0 0 24px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .gallery {
+            --per-view: 3;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .viewport {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+        .track {
+            display: flex;
+            transition: transform 0.45s ease;
+        }
+        .slide {
+            flex: 0 0 calc(100% / var(--per-view));
+            padding: 0 6px;
+        }
+        .slide img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        .arrow {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 46px;
+            height: 46px;
+            padding: 0;
+            cursor: pointer;
+            color: #ffffff;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border: none;
+            border-radius: 50%;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .arrow:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+        }
+        .arrow:focus-visible, .dot:focus-visible {
+            outline: 3px solid #f59e0b;
+            outline-offset: 2px;
+        }
+        .arrow svg {
+            width: 22px;
+            height: 22px;
+        }
+        .pager {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .dot {
+            width: 14px;
+            height: 14px;
+            padding: 0;
+            cursor: pointer;
+            background: #c7d2fe;
+            border: none;
+            border-radius: 50%;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .dot.active {
+            background: #6366f1;
+            transform: scale(1.25);
+        }
+        .counter {
+            margin: 10px 0 0;
+            text-align: center;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        footer {
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            text-shadow: 0 1px 4px rgba(31, 41, 55, 0.4);
+        }
+        @media (max-width: 600px) {
+            .card {
+                padding: 24px 12px 20px;
+            }
+            .gallery {
+                --per-view: 1;
+                gap: 6px;
+            }
+            .arrow {
+                width: 38px;
+                height: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1>Галерея изображений</h1>
+        <p class="subtitle">Листайте стрелками или выберите страницу внизу</p>
+        <div class="gallery">
+            <button type="button" class="arrow" id="prev" aria-label="Назад">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"></polyline></svg>
+            </button>
+            <div class="viewport">
+                <div class="track" id="track">
+                    <div class="slide"><img src="images/1.svg" alt="Изображение 1" width="400" height="300"></div>
+                    <div class="slide"><img src="images/2.svg" alt="Изображение 2" width="400" height="300"></div>
+                    <div class="slide"><img src="images/3.svg" alt="Изображение 3" width="400" height="300"></div>
+                    <div class="slide"><img src="images/4.svg" alt="Изображение 4" width="400" height="300"></div>
+                    <div class="slide"><img src="images/5.svg" alt="Изображение 5" width="400" height="300"></div>
+                    <div class="slide"><img src="images/6.svg" alt="Изображение 6" width="400" height="300"></div>
+                    <div class="slide"><img src="images/7.svg" alt="Изображение 7" width="400" height="300"></div>
+                    <div class="slide"><img src="images/8.svg" alt="Изображение 8" width="400" height="300"></div>
+                </div>
+            </div>
+            <button type="button" class="arrow" id="next" aria-label="Вперёд">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 5 16 12 9 19"></polyline></svg>
+            </button>
+        </div>
+        <div class="pager" id="pager"></div>
+        <p class="counter" id="counter" aria-live="polite"></p>
+    </main>
+    <footer>Белоусов Владислав</footer>
+</body>
+</html>
